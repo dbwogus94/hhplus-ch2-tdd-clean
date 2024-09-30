@@ -6,15 +6,15 @@ import {
 } from 'typeorm';
 
 export class BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id', comment: 'ID' })
-  readonly id: string;
+  @PrimaryGeneratedColumn({ type: 'int', name: 'id', comment: 'ID' })
+  readonly id: number;
 
-  @CreateDateColumn({ type: 'datetime', comment: '생성일' })
+  @CreateDateColumn({ type: 'text', comment: '생성일' })
   readonly createdAt: Date;
 
-  @UpdateDateColumn({ type: 'datetime', comment: '수정일' })
+  @UpdateDateColumn({ type: 'text', comment: '수정일' })
   readonly updatedAt: Date;
 
-  @DeleteDateColumn({ type: 'datetime', comment: '삭제일' })
+  @DeleteDateColumn({ type: 'text', comment: '삭제일' })
   deletedAt?: Date | null;
 }
