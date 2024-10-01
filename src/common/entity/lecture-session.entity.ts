@@ -1,21 +1,11 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { BaseEntity } from './base.entity';
+import { LectureSessionStatus } from './code';
 import { Lecture } from './lecture.entity';
 import { Reservation } from './reservation.entity';
 
 @Entity('lecture_session')
-@Index(['date', 'lectureId'])
-export class LectureSession {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class LectureSession extends BaseEntity {
   @Column('date', { comment: '특강날짜' })
   date: Date;
 
@@ -38,4 +28,11 @@ export class LectureSession {
 
   @OneToMany(() => Reservation, (reservation) => reservation.lectureSession)
   reservations: Reservation[];
+
+  @ManyToOne(() => LectureSessionStatus, (status) => status.lectureSessions)
+  @JoinColumn({
+    name: 'status',
+    foreignKeyConstraintName: 'fk_lecture_session_status',
+  })
+  lectureSessionStatus: LectureSessionStatus;
 }

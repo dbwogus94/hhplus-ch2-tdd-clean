@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Reservation } from '../reservation.entity';
 
 @Entity('reservation_status')
 export class ReservationStatus {
@@ -7,4 +8,7 @@ export class ReservationStatus {
 
   @Column()
   name: string;
+
+  @OneToMany(() => Reservation, (reservation) => reservation.status)
+  reservations: Reservation[];
 }

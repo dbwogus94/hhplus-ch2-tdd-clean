@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { LectureSession } from '../lecture-session.entity';
 
 @Entity('lecture_session_status')
 export class LectureSessionStatus {
@@ -7,4 +8,7 @@ export class LectureSessionStatus {
 
   @Column()
   name: string;
+
+  @OneToMany(() => LectureSession, (session) => session.status)
+  lectureSessions: LectureSession[];
 }
