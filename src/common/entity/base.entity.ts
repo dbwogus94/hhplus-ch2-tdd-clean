@@ -6,15 +6,18 @@ import {
 } from 'typeorm';
 
 export class BaseEntity {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id', comment: 'ID' })
+  @PrimaryGeneratedColumn({ type: 'int', comment: 'ID' })
   readonly id: number;
 
-  @CreateDateColumn({ type: 'text', comment: '생성일' })
+  @CreateDateColumn({ type: 'datetime', comment: '생성일' })
+  /** At이 붙는 컬럼은 시분초를 포함하는 datetime 형태의 날짜이다. */
   readonly createdAt: Date;
 
-  @UpdateDateColumn({ type: 'text', comment: '수정일' })
+  @UpdateDateColumn({ type: 'datetime', comment: '수정일' })
+  /** At이 붙는 컬럼은 시분초를 포함하는 datetime 형태의 날짜이다. */
   readonly updatedAt: Date;
 
-  @DeleteDateColumn({ type: 'text', comment: '삭제일' })
+  @DeleteDateColumn({ type: 'datetime', comment: '삭제일' })
+  /** At이 붙는 컬럼은 시분초를 포함하는 datetime 형태의 날짜이다. */
   deletedAt?: Date | null;
 }

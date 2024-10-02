@@ -6,8 +6,9 @@ import { Reservation } from './reservation.entity';
 
 @Entity('lecture_session')
 export class LectureSession extends BaseEntity {
-  @Column('date', { comment: '특강날짜' })
-  date: Date;
+  @Column('datetime', { comment: '특강날짜' })
+  /** At이 붙는 컬럼은 시분초를 포함하는 datetime 형태의 날짜이다. */
+  startedAt: Date;
 
   @Column('int', { comment: '특강 FK' })
   lectureId: number; // 명시적 FK

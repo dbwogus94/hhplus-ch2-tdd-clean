@@ -6,9 +6,9 @@ export class Init1727721851201 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE "lecture" (
         "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-        "createdAt" text NOT NULL DEFAULT (datetime('now')),
-        "updatedAt" text NOT NULL DEFAULT (datetime('now')),
-        "deletedAt" text,
+        "createdAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "updatedAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "deletedAt" datetime,
         "name" varchar NOT NULL,
         "lecturerName" varchar NOT NULL,
         "maxCapacity" integer NOT NULL
@@ -35,9 +35,9 @@ export class Init1727721851201 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE "user" (
         "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-        "createdAt" text NOT NULL DEFAULT (datetime('now')),
-        "updatedAt" text NOT NULL DEFAULT (datetime('now')),
-        "deletedAt" text,
+        "createdAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "updatedAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "deletedAt" datetime,
         "name" character NOT NULL,
         "phone" character NOT NULL,
         "email" character NOT NULL
@@ -48,10 +48,10 @@ export class Init1727721851201 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE "lecture_session" (
         "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-        "createdAt" text NOT NULL DEFAULT (datetime('now')),
-        "updatedAt" text NOT NULL DEFAULT (datetime('now')),
-        "deletedAt" text,
-        "date" date NOT NULL,
+        "createdAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "updatedAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "deletedAt" datetime,
+        "startedAt" datetime NOT NULL,
         "lectureId" integer NOT NULL,
         "status" varchar NOT NULL,
         "currentAttendee" integer NOT NULL,
@@ -64,9 +64,9 @@ export class Init1727721851201 implements MigrationInterface {
     await queryRunner.query(`
       CREATE TABLE "reservation" (
         "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-        "createdAt" text NOT NULL DEFAULT (datetime('now')),
-        "updatedAt" text NOT NULL DEFAULT (datetime('now')),
-        "deletedAt" text,
+        "createdAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "updatedAt" datetime NOT NULL DEFAULT (datetime('now', 'localtime')),
+        "deletedAt" datetime,
         "userId" integer NOT NULL,
         "status" varchar NOT NULL,
         "lectureSessionId" integer NOT NULL,
