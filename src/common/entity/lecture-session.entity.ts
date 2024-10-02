@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { LectureSessionStatus } from './code';
-import { Lecture } from './lecture.entity';
-import { Reservation } from './reservation.entity';
+import { LectureSessionStatusEntity } from './code';
+import { LectureEntity } from './lecture.entity';
+import { ReservationEntity } from './reservation.entity';
 
 @Entity('lecture_session')
-export class LectureSession extends BaseEntity {
+export class LectureSessionEntity extends BaseEntity {
   @Column('datetime', { comment: '특강날짜' })
   /** At이 붙는 컬럼은 시분초를 포함하는 datetime 형태의 날짜이다. */
   startedAt: Date;
@@ -20,20 +20,26 @@ export class LectureSession extends BaseEntity {
   currentAttendee: number;
 
   /* ======================= 연관관계 ======================= */
-  @ManyToOne(() => Lecture, (lecture) => lecture.sessions)
+  @ManyToOne(() => LectureEntity, (lecture) => lecture.sessions)
   @JoinColumn({
     name: 'lectureId',
     foreignKeyConstraintName: 'fk_lecture_session_lecture',
   })
-  lecture: Lecture;
+  lecture: LectureEntity;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.lectureSession)
-  reservations: Reservation[];
+  @OneToMany(
+    () => ReservationEntity,
+    (reservation) => reservation.lectureSession,
+  )
+  reservations: ReservationEntity[];
 
-  @ManyToOne(() => LectureSessionStatus, (status) => status.lectureSessions)
+  @ManyToOne(
+    () => LectureSessionStatusEntity,
+    (status) => status.lectureSessions,
+  )
   @JoinColumn({
     name: 'status',
     foreignKeyConstraintName: 'fk_lecture_session_status',
   })
-  lectureSessionStatus: LectureSessionStatus;
+  lectureSessionStatus: LectureSessionStatusEntity;
 }
