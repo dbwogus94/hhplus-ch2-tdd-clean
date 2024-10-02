@@ -10,6 +10,11 @@ import {
   Query,
 } from '@nestjs/common';
 import { LectureSessionService } from './lecture-session.service';
+import {
+  GetLectureSessionsQuery,
+  GetLectureSessionsResponse,
+  PostLectureSessionRequest,
+} from './dto';
 
 @Controller('/lecture-sessions')
 export class LectureSessionController {
@@ -17,7 +22,9 @@ export class LectureSessionController {
 
   @Get('/')
   @HttpCode(200)
-  async getLectureSessions(@Query() query: unknown) {
+  async getLectureSessions(
+    @Query() query: GetLectureSessionsQuery,
+  ): Promise<GetLectureSessionsResponse> {
     console.log(query);
     throw new NotFoundException('미구현 API');
   }
@@ -26,7 +33,7 @@ export class LectureSessionController {
   @HttpCode(200)
   async postLectureSessionReservations(
     @Param('id', ParseIntPipe) lectureSessionId: number,
-    @Body() postDto: unknown,
+    @Body() postDto: PostLectureSessionRequest,
   ): Promise<void> {
     console.log(lectureSessionId, postDto);
     throw new NotFoundException('미구현 API');
