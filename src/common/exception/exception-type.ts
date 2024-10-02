@@ -25,6 +25,6 @@ export const ApplicationExceptionRecord: ApplicationExceptionRecord = {
 
   [ApplicationExceptionCode.NOT_FOUND]: {
     message: '자원이 존재하지 않습니다.',
-    state: 400,
+    state: 404,
   },
 } as const;
