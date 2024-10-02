@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
 
-@Module({})
+import { LectureSessionModule } from './lecture-session/lecture-session.module';
+
+@Module({
+  imports: [LectureSessionModule],
+})
 export class DomainModule {}
