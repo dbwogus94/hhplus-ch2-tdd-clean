@@ -15,5 +15,5 @@ export class User extends BaseEntity {
 
   /* ======================= 연관관계 ======================= */
   @OneToMany(() => ReservationEntity, (reservation) => reservation.user)
-  reservations: ReservationEntity[];
+  reservations?: ReservationEntity[];
 }

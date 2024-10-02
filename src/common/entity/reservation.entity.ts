@@ -1,7 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
 
 import { BaseEntity } from './base.entity';
-import { ReservationStatusEntity } from './code';
 import { LectureSessionEntity } from './lecture-session.entity';
 import { User } from './user.entity';
 
@@ -15,6 +14,10 @@ export class ReservationEntity extends BaseEntity {
   status: string; // 명시적 FK
 
   @Column('int', { comment: '특강 세션 FK' })
+  @JoinColumn({
+    name: 'status',
+    foreignKeyConstraintName: 'fk_reservation_status',
+  })
   lectureSessionId: number; // 명시적 FK
 
   /* ======================= 연관관계 ======================= */
@@ -32,10 +35,10 @@ export class ReservationEntity extends BaseEntity {
   })
   user: User;
 
-  @ManyToOne(() => ReservationStatusEntity, (status) => status.code)
-  @JoinColumn({
-    name: 'status',
-    foreignKeyConstraintName: 'fk_reservation_status',
-  })
-  rservationStatus: ReservationStatusEntity;
+  // @ManyToOne(() => ReservationStatusEntity, (status) => status.code)
+  // @JoinColumn({
+  //   name: 'status',
+  //   foreignKeyConstraintName: 'fk_reservation_status',
+  // })
+  // rservationStatus: ReservationStatusEntity;
 }

@@ -15,5 +15,5 @@ export class LectureEntity extends BaseEntity {
 
   /* ======================= 연관관계 ======================= */
   @OneToMany(() => LectureSessionEntity, (session) => session.lecture)
-  sessions: LectureSessionEntity[];
+  sessions?: LectureSessionEntity[] | [];
 }

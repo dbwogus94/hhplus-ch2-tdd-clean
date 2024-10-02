@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
-import { BaseRepository, LectureEntity } from 'src/common';
+import { EntityManager, MoreThan } from 'typeorm';
+import {
+  BaseRepository,
+  LectureSessionEntity,
+  LectureSessionStatusCode,
+} from 'src/common';
 
-export abstract class LectureSessionRepositoryPort extends BaseRepository<LectureEntity> {}
+export abstract class LectureSessionRepositoryPort extends BaseRepository<LectureSessionEntity> {
+  abstract getAvailableOneByStartedAt(
+    startedAt: Date,
+  ): Promise<LectureSessionEntity[]>;
+}
 
 @Injectable()
 export class LectureSessionRepository extends LectureSessionRepositoryPort {
@@ -11,6 +19,18 @@ export class LectureSessionRepository extends LectureSessionRepositoryPort {
     @InjectEntityManager()
     readonly manager: EntityManager,
   ) {
-    super(LectureEntity, manager);
+    super(LectureSessionEntity, manager);
+  }
+
+  async getAvailableOneByStartedAt(
+    startedAt: Date,
+  ): Promise<LectureSessionEntity[]> {
+    return await this.find({
+      where: {
+        startedAt: MoreThan(startedAt),
+        status: LectureSessionStatusCode.AVAILABLE,
+      },
+      relations: { lecture: true },
+    });
   }
 }
