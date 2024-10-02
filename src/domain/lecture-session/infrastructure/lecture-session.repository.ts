@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
+import { EntityManager, MoreThan } from 'typeorm';
 import {
   BaseRepository,
   LectureSessionEntity,
@@ -26,7 +26,10 @@ export class LectureSessionRepository extends LectureSessionRepositoryPort {
     startedAt: Date,
   ): Promise<LectureSessionEntity[]> {
     return await this.find({
-      where: { startedAt, status: LectureSessionStatusCode.AVAILABLE },
+      where: {
+        startedAt: MoreThan(startedAt),
+        status: LectureSessionStatusCode.AVAILABLE,
+      },
       relations: { lecture: true },
     });
   }

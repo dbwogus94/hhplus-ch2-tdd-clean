@@ -28,11 +28,17 @@ export class GetLectureSessionsResponse
   ): GetLectureSessionsResponse | GetLectureSessionsResponse[] {
     if (Array.isArray(entity)) return entity.map((e) => this.from(e));
 
+    const { lecture, ...other } = entity;
     return new GetLectureSessionsResponse(
-      entity.id,
-      entity.currentAttendee,
-      entity.status,
-      entity.lecture,
+      other.id,
+      other.currentAttendee,
+      other.status,
+      {
+        id: lecture.id,
+        name: lecture.name,
+        lecturerName: lecture.lecturerName,
+        maxCapacity: lecture.maxCapacity,
+      },
     );
   }
 }

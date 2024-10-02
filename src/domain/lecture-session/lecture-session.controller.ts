@@ -27,7 +27,7 @@ export class LectureSessionController {
     @Query() query: GetLectureSessionsQuery,
   ): Promise<GetLectureSessionsResponse[]> {
     return await this.lectureSessionService.getLectureSessions(
-      ReadLectureSessionsCommand.from({ startedAt: query.dateString }),
+      ReadLectureSessionsCommand.from({ startedAt: query.startedAt }),
     );
   }
 
