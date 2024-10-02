@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { Reservation } from './reservation.entity';
+import { ReservationEntity } from './reservation.entity';
 
 @Entity('user')
 export class User extends BaseEntity {
@@ -14,6 +14,6 @@ export class User extends BaseEntity {
   email: string;
 
   /* ======================= 연관관계 ======================= */
-  @OneToMany(() => Reservation, (reservation) => reservation.user)
-  reservations: Reservation[];
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.user)
+  reservations: ReservationEntity[];
 }

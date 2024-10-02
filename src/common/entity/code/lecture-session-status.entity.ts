@@ -1,14 +1,14 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { LectureSession } from '../lecture-session.entity';
+import { LectureSessionEntity } from '../lecture-session.entity';
 
 @Entity('lecture_session_status')
-export class LectureSessionStatus {
+export class LectureSessionStatusEntity {
   @PrimaryColumn()
   code: string;
 
   @Column()
   name: string;
 
-  @OneToMany(() => LectureSession, (session) => session.status)
-  lectureSessions: LectureSession[];
+  @OneToMany(() => LectureSessionEntity, (session) => session.status)
+  lectureSessions: LectureSessionEntity[];
 }

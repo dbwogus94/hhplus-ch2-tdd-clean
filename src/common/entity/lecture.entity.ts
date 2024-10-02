@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { LectureSession } from './lecture-session.entity';
+import { LectureSessionEntity } from './lecture-session.entity';
 
 @Entity('lecture')
-export class Lecture extends BaseEntity {
+export class LectureEntity extends BaseEntity {
   @Column('varchar', { comment: '특강 이름' })
   name: string;
 
@@ -14,6 +14,6 @@ export class Lecture extends BaseEntity {
   maxCapacity: number;
 
   /* ======================= 연관관계 ======================= */
-  @OneToMany(() => LectureSession, (session) => session.lecture)
-  sessions: LectureSession[];
+  @OneToMany(() => LectureSessionEntity, (session) => session.lecture)
+  sessions: LectureSessionEntity[];
 }

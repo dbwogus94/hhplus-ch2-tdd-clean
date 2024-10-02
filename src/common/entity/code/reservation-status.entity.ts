@@ -1,14 +1,14 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
-import { Reservation } from '../reservation.entity';
+import { ReservationEntity } from '../reservation.entity';
 
 @Entity('reservation_status')
-export class ReservationStatus {
+export class ReservationStatusEntity {
   @PrimaryColumn()
   code: string;
 
   @Column()
   name: string;
 
-  @OneToMany(() => Reservation, (reservation) => reservation.status)
-  reservations: Reservation[];
+  @OneToMany(() => ReservationEntity, (reservation) => reservation.status)
+  reservations: ReservationEntity[];
 }

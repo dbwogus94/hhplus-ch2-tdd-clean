@@ -1,13 +1,13 @@
 import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
 
 import { BaseEntity } from './base.entity';
-import { ReservationStatus } from './code';
-import { LectureSession } from './lecture-session.entity';
+import { ReservationStatusEntity } from './code';
+import { LectureSessionEntity } from './lecture-session.entity';
 import { User } from './user.entity';
 
 @Entity('reservation')
 @Unique(['lectureSessionId', 'userId', 'status'])
-export class Reservation extends BaseEntity {
+export class ReservationEntity extends BaseEntity {
   @Column('int', { comment: '신청자 FK' })
   userId: number; // 명시적 FK
 
@@ -18,12 +18,12 @@ export class Reservation extends BaseEntity {
   lectureSessionId: number; // 명시적 FK
 
   /* ======================= 연관관계 ======================= */
-  @ManyToOne(() => LectureSession, (session) => session.reservations)
+  @ManyToOne(() => LectureSessionEntity, (session) => session.reservations)
   @JoinColumn({
     name: 'lectureSessionId',
     foreignKeyConstraintName: 'fk_reservation_lecture_session',
   })
-  lectureSession: LectureSession;
+  lectureSession: LectureSessionEntity;
 
   @ManyToOne(() => User, (user) => user.reservations)
   @JoinColumn({
@@ -32,10 +32,10 @@ export class Reservation extends BaseEntity {
   })
   user: User;
 
-  @ManyToOne(() => ReservationStatus, (status) => status.code)
+  @ManyToOne(() => ReservationStatusEntity, (status) => status.code)
   @JoinColumn({
     name: 'status',
     foreignKeyConstraintName: 'fk_reservation_status',
   })
-  rservationStatus: ReservationStatus;
+  rservationStatus: ReservationStatusEntity;
 }
