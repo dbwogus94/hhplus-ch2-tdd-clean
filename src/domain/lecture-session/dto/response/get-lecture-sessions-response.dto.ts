@@ -13,8 +13,26 @@ class GetLectureResponse
 export class GetLectureSessionsResponse
   implements Pick<LectureSessionEntity, 'id' | 'currentAttendee' | 'status'>
 {
-  id: number;
-  currentAttendee: number;
-  status: string;
-  lecture: GetLectureResponse;
+  constructor(
+    readonly id: number,
+    readonly currentAttendee: number,
+    readonly status: string,
+    readonly lecture: GetLectureResponse,
+  ) {}
+
+  /** from: 하나의 매개변수 */
+  static from(entity: LectureSessionEntity): GetLectureSessionsResponse;
+  static from(entity: LectureSessionEntity[]): GetLectureSessionsResponse[];
+  static from(
+    entity: LectureSessionEntity | LectureSessionEntity[],
+  ): GetLectureSessionsResponse | GetLectureSessionsResponse[] {
+    if (Array.isArray(entity)) return entity.map((e) => this.from(e));
+
+    return new GetLectureSessionsResponse(
+      entity.id,
+      entity.currentAttendee,
+      entity.status,
+      entity.lecture,
+    );
+  }
 }
