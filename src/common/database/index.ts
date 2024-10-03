@@ -1,2 +1,2 @@
-export * from './sqlite3';
+export * from './typeorm-option';
 export * from './base.repository';

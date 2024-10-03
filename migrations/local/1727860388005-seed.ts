@@ -82,7 +82,8 @@ export class Seed1727860388005 implements MigrationInterface {
           ('${startDate} 15:00:00', 4, 'Available', 0),
           ('${startDate} 11:30:00', 5, 'Available', 0),
           ('${startDate} 14:00:00', 5, 'Available', 0),
-          ('${startDate} 09:30:00', 5, 'Available', 0)
+          ('${startDate} 09:30:00', 5, 'Available', 0),
+          ('${startDate} 20:30:00', 5, 'Available', 0) -- 동시성 테스트용으로 사용하지 않는다.
         ;
     `);
 
@@ -92,7 +93,8 @@ export class Seed1727860388005 implements MigrationInterface {
     const lectureSessionAttendees = new Map();
 
     for (let i = 1; i <= 14; i++) {
-      const count = Math.floor(Math.random() * 14) + 15;
+      const count = 28; // 일괄 28명 추가
+      // const count = Math.floor(Math.random() * 14) + 15;
       const userIds = new Set();
 
       while (userIds.size < count) {
