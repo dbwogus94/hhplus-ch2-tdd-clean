@@ -15,12 +15,17 @@ class GetLectureResponse
 }
 
 export class GetLectureSessionsResponse
-  implements Pick<LectureSessionEntity, 'id' | 'currentAttendee' | 'status'>
+  implements
+    Pick<
+      LectureSessionEntity,
+      'id' | 'currentAttendee' | 'status' | 'startedAt'
+    >
 {
   constructor(
     readonly id: number,
     readonly currentAttendee: number,
     readonly status: LectureSessionStatusCode,
+    readonly startedAt: Date,
     readonly lecture: GetLectureResponse,
   ) {}
 
@@ -37,6 +42,7 @@ export class GetLectureSessionsResponse
       other.id,
       other.currentAttendee,
       other.status,
+      other.startedAt,
       {
         id: lecture.id,
         name: lecture.name,

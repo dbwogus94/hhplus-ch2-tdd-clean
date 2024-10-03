@@ -32,7 +32,9 @@ export class LectureSessionEntity extends BaseEntity {
   currentAttendee: number;
 
   /* ======================= 연관관계 ======================= */
-  @ManyToOne(() => LectureEntity, (lecture) => lecture.sessions)
+  @ManyToOne(() => LectureEntity, (lecture) => lecture.sessions, {
+    eager: true,
+  })
   @JoinColumn({
     name: 'lectureId',
     foreignKeyConstraintName: 'fk_lecture_session_lecture',

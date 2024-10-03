@@ -16,10 +16,27 @@ export class ReadLectureSessionsCommand {
   }
 
   /**
-   * `this.startedAt`가 현재시간보다 크다면 true를 리턴한다.
-   * @returns
+   * `this.startedAt`이 YYYY-MM-DD 기준으로 오늘 날짜보다 크면 true를 리턴한다.
+   * @returns {boolean}
    */
-  validate() {
-    return this.prop.startedAt > new Date() ? true : false;
+  validate(): boolean {
+    const today = new Date();
+    const todayString = this.formatDate(today);
+    const startedAtString = this.formatDate(this.prop.startedAt);
+
+    return startedAtString >= todayString;
+  }
+
+  /**
+   * Date 객체를 'YYYY-MM-DD' 형식의 문자열로 변환한다.
+   * @param {Date} date - 변환할 Date 객체
+   * @returns {string} - 'YYYY-MM-DD' 형식의 문자열
+   */
+  private formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 }

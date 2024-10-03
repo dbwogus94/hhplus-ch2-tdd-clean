@@ -19,7 +19,7 @@ export class UserService {
       throw new NotFoundException('userId에 해당하는 유저가 없습니다.');
 
     const reservations =
-      await this.reservationRepo.getReservationsWithLectureSession(userId);
+      await this.reservationRepo.getManyWithLectureSession(userId);
     return GetLectureReservationsResponse.from(reservations);
   }
 }

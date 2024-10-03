@@ -1,9 +1,9 @@
-import { sqliteDataSourceOptions } from 'src/common';
+import { mysqlDataSourceOptions } from 'src/common';
 import { DataSource } from 'typeorm';
 
 export const OrmDataSource = new DataSource({
-  ...sqliteDataSourceOptions,
+  ...mysqlDataSourceOptions,
   migrations: [`${__dirname}/**/local/*{.ts,.js}`],
   migrationsTableName: 'migrations',
-  logging: true,
+  // logging: true,
 });
