@@ -5,16 +5,14 @@ import { InvalidParameterException } from 'src/common';
 import { ReadLectureSessionsCommand } from 'src/domain/lecture-session/dto';
 import { LectureSessionRepositoryPort } from 'src/domain/lecture-session/infrastructure';
 import { LectureSessionService } from 'src/domain/lecture-session/lecture-session.service';
-import {
-  LectureSessionFactory,
-  StubIectureSessionRepository,
-} from '../../fixture';
+import { LectureSessionFactory } from '../../fixture';
+import { StubIectureSessionRepository } from '../../stub';
 
 describe('LectureSessionService', () => {
   let manager: MockProxy<EntityManager>;
   let stubLectureSessionRepo: LectureSessionRepositoryPort;
   let service: LectureSessionService;
-  const dummyList = LectureSessionFactory.createMany(10);
+  const dummyList = LectureSessionFactory.create({ length: 10 });
 
   beforeEach(() => {
     manager = mock<EntityManager>();
