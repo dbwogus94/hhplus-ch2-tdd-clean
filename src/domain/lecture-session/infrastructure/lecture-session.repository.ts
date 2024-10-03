@@ -19,6 +19,7 @@ export abstract class LectureSessionRepositoryPort extends BaseRepository<Lectur
     startedAt: Date,
   ): Promise<LectureSessionEntity[]>;
 
+  /** pessimistic_write락을 사용해 읽기 쓰기 락을 사용한다. */
   abstract getOneByPK(lectureSessionId: number): Promise<LectureSessionEntity>;
   abstract updateOne(
     lectureSessionId: number,
@@ -57,12 +58,12 @@ export class LectureSessionRepository extends LectureSessionRepositoryPort {
   override async getOneByPK(
     lectureSessionId: number,
   ): Promise<LectureSessionEntity> {
-    const lectureSession = await this.findOne({
-      where: {
-        id: lectureSessionId,
-        // status: LectureSessionStatusCode.AVAILABLE,
-      },
-    });
+    const lectureSession = await this.createQueryBuilder('lectureSession')
+      .useTransaction(true)
+      .setLock('pessimistic_write')
+      .innerJoinAndSelect('lectureSession.lecture', 'lecture')
+      .where('lectureSession.id = :id', { id: lectureSessionId })
+      .getOne();
     if (!lectureSession) throw new NotFoundException();
     return lectureSession;
   }
