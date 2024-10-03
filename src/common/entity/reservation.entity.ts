@@ -3,6 +3,7 @@ import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { LectureSessionEntity } from './lecture-session.entity';
 import { UserEntity } from './user.entity';
+import { ReservationStatusCode } from './enum';
 
 @Entity('reservation')
 @Unique(['lectureSessionId', 'userId', 'status'])
@@ -11,7 +12,7 @@ export class ReservationEntity extends BaseEntity {
   userId: number; // 명시적 FK
 
   @Column('int', { comment: '신청(예약) 상태' })
-  status: string; // 명시적 FK
+  status: ReservationStatusCode; // 명시적 FK
 
   @Column('int', { comment: '특강 세션 FK' })
   @JoinColumn({

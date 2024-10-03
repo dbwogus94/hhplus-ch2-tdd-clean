@@ -1,4 +1,8 @@
-import { LectureEntity, LectureSessionEntity } from 'src/common';
+import {
+  LectureEntity,
+  LectureSessionEntity,
+  LectureSessionStatusCode,
+} from 'src/common';
 
 class GetLectureResponse
   implements
@@ -16,7 +20,7 @@ export class GetLectureSessionsResponse
   constructor(
     readonly id: number,
     readonly currentAttendee: number,
-    readonly status: string,
+    readonly status: LectureSessionStatusCode,
     readonly lecture: GetLectureResponse,
   ) {}
 
