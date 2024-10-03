@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, Unique } from 'typeorm';
 
 import { BaseEntity } from './base.entity';
 import { LectureSessionEntity } from './lecture-session.entity';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('reservation')
 @Unique(['lectureSessionId', 'userId', 'status'])
@@ -28,12 +28,12 @@ export class ReservationEntity extends BaseEntity {
   })
   lectureSession: LectureSessionEntity;
 
-  @ManyToOne(() => User, (user) => user.reservations)
+  @ManyToOne(() => UserEntity, (user) => user.reservations)
   @JoinColumn({
     name: 'userId',
     foreignKeyConstraintName: 'fk_reservation_user',
   })
-  user: User;
+  user: UserEntity;
 
   // @ManyToOne(() => ReservationStatusEntity, (status) => status.code)
   // @JoinColumn({
