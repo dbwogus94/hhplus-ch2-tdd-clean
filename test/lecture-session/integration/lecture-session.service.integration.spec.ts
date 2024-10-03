@@ -189,7 +189,7 @@ describe('LectureSessionService', () => {
 
   describe('createReservation 동시성 테스트', () => {
     describe('성공한다.', () => {
-      it('40개의 .', async () => {
+      it('특강 세션을 아무도 신청하지 않은 상태에서 40개의 요청이 들어오면 30개의 요청만 성공한다.', async () => {
         const userIds = Array.from({ length: 40 }, (_, i) => i + 1);
         const lectureSessionId = 15;
         const success = 30;
@@ -218,6 +218,37 @@ describe('LectureSessionService', () => {
         });
         expect(reservations.length).toBe(success);
         expect(lectureSession.status).toBe(successStatus);
+      });
+
+      it('동일한 유저 정보로 같은 특강을 5번 신청했을 때, 1번만 성공한다.', async () => {
+        const request = Array.from({ length: 5 }, (_, i) => i + 1);
+        const userId = 31;
+        const lectureSessionId = 15;
+        const success = 1;
+
+        const commands = request.map(() =>
+          WriteReservationCommand.from({
+            userId,
+            lectureSessionId,
+          }),
+        );
+
+        // When
+        await Promise.allSettled(
+          commands.map(
+            async (command) => await service.createReservation(command),
+          ),
+        );
+
+        // Then
+        const reservations = await reservationRepository.find({
+          where: { userId, lectureSessionId },
+        });
+        const lectureSession = await lectureSessionRepository.findOneBy({
+          id: lectureSessionId,
+        });
+        expect(reservations.length).toBe(success);
+        expect(lectureSession.currentAttendee).toBe(success);
       });
     });
   });
