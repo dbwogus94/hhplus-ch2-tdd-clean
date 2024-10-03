@@ -15,6 +15,9 @@ export enum ApplicationExceptionCode {
   INVALID_PARAMETER = 'INVALID_PARAMETER',
   /** 존재하지 않는 값 */
   NOT_FOUND = 'NOT_FOUND',
+
+  /** 사용불가능한 상태  */
+  CONFLICT_STATUS = 'CONFLICT_STATUS',
 }
 
 export const ApplicationExceptionRecord: ApplicationExceptionRecord = {
@@ -26,5 +29,10 @@ export const ApplicationExceptionRecord: ApplicationExceptionRecord = {
   [ApplicationExceptionCode.NOT_FOUND]: {
     message: '자원이 존재하지 않습니다.',
     state: 404,
+  },
+
+  [ApplicationExceptionCode.CONFLICT_STATUS]: {
+    message: '사용 불가능한 상태입니다.',
+    state: 409,
   },
 } as const;
