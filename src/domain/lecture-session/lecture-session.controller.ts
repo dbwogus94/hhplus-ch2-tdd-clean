@@ -32,7 +32,7 @@ export class LectureSessionController {
   }
 
   @Post('/:id/reservations')
-  @HttpCode(200)
+  @HttpCode(204)
   async postLectureSessionReservation(
     @Param('id', ParseIntPipe) lectureSessionId: number,
     @Body() postDto: PostLectureSessionRequest,

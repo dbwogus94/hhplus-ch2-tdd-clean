@@ -9,6 +9,7 @@ import {
 import { BaseEntity } from './base.entity';
 import { LectureEntity } from './lecture.entity';
 import { ReservationEntity } from './reservation.entity';
+import { LectureSessionStatusCode } from './enum';
 
 @Entity('lecture_session')
 @Index(['status', 'startedAt'])
@@ -25,7 +26,7 @@ export class LectureSessionEntity extends BaseEntity {
     name: 'status',
     foreignKeyConstraintName: 'fk_lecture_session_status',
   })
-  status: string;
+  status: LectureSessionStatusCode;
 
   @Column('int', { comment: '현재 인원' })
   currentAttendee: number;

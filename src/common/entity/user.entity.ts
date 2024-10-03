@@ -3,7 +3,7 @@ import { BaseEntity } from './base.entity';
 import { ReservationEntity } from './reservation.entity';
 
 @Entity('user')
-export class User extends BaseEntity {
+export class UserEntity extends BaseEntity {
   @Column('character', { comment: '이름' })
   name: string;
 
