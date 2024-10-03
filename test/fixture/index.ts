@@ -1,2 +1,3 @@
 export * from './lecture-session-factory';
-export * from './stub-lecture-session.repository';
+export * from './reservation-factory';
+export * from './user-factory';
