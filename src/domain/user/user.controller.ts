@@ -1,15 +1,8 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  NotFoundException,
-  Param,
-  ParseIntPipe,
-} from '@nestjs/common';
-import { UserService } from './user.service';
+import { Controller, Get, HttpCode, Param, ParseIntPipe } from '@nestjs/common';
 import { GetLectureReservationsResponse } from './dto';
+import { UserService } from './user.service';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -18,7 +11,6 @@ export class UserController {
   async getLectureReservations(
     @Param('id', ParseIntPipe) userId: number,
   ): Promise<GetLectureReservationsResponse[]> {
-    console.log(userId);
-    throw new NotFoundException('미구현 API');
+    return await this.userService.getLectureReservations(userId);
   }
 }
