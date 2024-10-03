@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager, MoreThan } from 'typeorm';
 import {
   BaseRepository,
   LectureSessionEntity,
   LectureSessionStatusCode,
   NotFoundException,
 } from 'src/common';
+import { EntityManager } from 'typeorm';
 
 type UpdateBody = Pick<
   Partial<LectureSessionEntity>,
@@ -38,13 +38,20 @@ export class LectureSessionRepository extends LectureSessionRepositoryPort {
   override async getManyAvailableByStartedAt(
     startedAt: Date,
   ): Promise<LectureSessionEntity[]> {
-    return await this.find({
-      where: {
-        // TODO: 해당날짜의 강의가 조회되게 변경
-        startedAt: MoreThan(startedAt),
+    const startDate = new Date(startedAt);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(startedAt);
+    endDate.setHours(23, 59, 59, 999);
+
+    const results = await this.createQueryBuilder('lectureSession')
+      .innerJoinAndSelect('lectureSession.lecture', 'lecture')
+      .where('lectureSession.startedAt >= :startDate', { startDate })
+      .andWhere('lectureSession.startedAt <= :endDate', { endDate })
+      .andWhere('lectureSession.status = :status', {
         status: LectureSessionStatusCode.AVAILABLE,
-      },
-    });
+      })
+      .getMany();
+    return results;
   }
 
   override async getOneByPK(

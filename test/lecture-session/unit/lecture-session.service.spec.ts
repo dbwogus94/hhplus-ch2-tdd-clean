@@ -1,24 +1,45 @@
-import { type MockProxy, mock } from 'jest-mock-extended';
-import { EntityManager } from 'typeorm';
+import { mock } from 'jest-mock-extended';
+import { DataSource, EntityManager } from 'typeorm';
 
-import { InvalidParameterException } from 'src/common';
-import { ReadLectureSessionsCommand } from 'src/domain/lecture-session/dto';
+import {
+  ConflictStatusException,
+  InvalidParameterException,
+  NotFoundException,
+} from 'src/common';
+import {
+  ReadLectureSessionsCommand,
+  WriteReservationCommand,
+} from 'src/domain/lecture-session/dto';
 import { LectureSessionRepositoryPort } from 'src/domain/lecture-session/infrastructure';
 import { LectureSessionService } from 'src/domain/lecture-session/lecture-session.service';
-import { LectureSessionFactory } from '../../fixture';
-import { StubIectureSessionRepository } from '../../stub';
+import { ReservationRepositoryPort } from 'src/domain/reservation';
+import { LectureSessionFactory, ReservationFactory } from '../../fixture';
+import {
+  StubIectureSessionRepository,
+  StubReservationRepository,
+} from '../../stub';
 
 describe('LectureSessionService', () => {
-  let manager: MockProxy<EntityManager>;
   let stubLectureSessionRepo: LectureSessionRepositoryPort;
+  let stubReservationRepo: ReservationRepositoryPort;
   let service: LectureSessionService;
-  const dummyList = LectureSessionFactory.create({ length: 10 });
+  const lectureSessionDummyList = LectureSessionFactory.create({ length: 10 });
+  const reservationDummyList = ReservationFactory.create({ length: 10 });
 
   beforeEach(() => {
-    manager = mock<EntityManager>();
+    const manager = mock<EntityManager>();
+    const dataSource = mock<DataSource>();
     stubLectureSessionRepo = new StubIectureSessionRepository(manager) //
-      .setDummy(dummyList);
-    service = new LectureSessionService(stubLectureSessionRepo);
+      .setDummy(lectureSessionDummyList);
+
+    stubReservationRepo = new StubReservationRepository(manager) //
+      .setDummy(reservationDummyList);
+
+    service = new LectureSessionService(
+      dataSource,
+      stubLectureSessionRepo,
+      stubReservationRepo,
+    );
   });
 
   /**
@@ -31,9 +52,9 @@ describe('LectureSessionService', () => {
    */
   describe('getLectureSessions', () => {
     describe('실패한다.', () => {
-      it('조회 날짜가 현재시간 보다 작다면 실패한다.', () => {
+      it('조회 날짜가 오늘 날짜 보다 작다면 실패한다.', () => {
         // given
-        const startedAt = new Date(Date.now() - 90000);
+        const startedAt = new Date(Date.now() - 86400000); // 1일전
         const success = InvalidParameterException;
 
         // when
@@ -47,10 +68,10 @@ describe('LectureSessionService', () => {
     });
 
     describe('성공한다.', () => {
-      it('조회 날짜가 현재시간 보다 크다면 성공한다.', async () => {
+      it('조회 날짜가 오늘 날짜 보다 크다거나 같다면 성공한다.', async () => {
         // given
-        const startedAt = new Date(Date.now() + 1);
-        const success = dummyList;
+        const startedAt = new Date();
+        const success = lectureSessionDummyList;
 
         // when
         const result = await service.getLectureSessions(
@@ -64,20 +85,94 @@ describe('LectureSessionService', () => {
   });
 
   /**
-   * 특정 유저의 포인트 충전/이용 내역을 조회합니다.
+   * 강의 신청 API
    * ### TC
    * 1. 성공
-   * - 포인트 충전/이용 내역이을 응답한다.
-   * - 포인트 충전/이용 내역이 없는 유저라면 빈 배열을 응답한다.
+   * - 특강 신청에 성공한다.
+   * - 특강 신청에 완료시 정원에 도달하면 마감상태가 된다.
    * 2. 실패
-   * - `userId`가 양수가 아니라면 실패한다.
+   * - 특강 세션이 없다면 실패한다.
+   * - 특강 세션이 신청가능 한 상태가 아니면 실패한다.
+   * - 특강 세션에 유저가 이미 신청했다면 실패한다.
    */
-  // describe('createReservation', () => {
-  //   describe('실패한다.', () => { });
+  describe.skip('createReservation', () => {
+    describe('실패한다.', () => {
+      it('특강 세션이 없다면 실패한다.', () => {
+        // given
+        const userId = 1;
+        const lectureSessionId = 1;
+        const success = NotFoundException;
 
-  // describe('성공한다.', () => {
-  //   it('`userId` 유효하면 포인트 히스토리 내역을 리턴한다.', async () => { });
+        // when
+        const result = service.createReservation(
+          WriteReservationCommand.from({ userId, lectureSessionId }),
+        );
 
-  //   it('포인트 히스토리는 내역이 존재하지 않으면 빈배열을 응답한다.', async () => { });
-  // });
+        // then
+        expect(result).rejects.toBeInstanceOf(success);
+      });
+
+      it('특강 세션이 신청가능 한 상태가 아니면 실패한다.', async () => {
+        // given
+        const userId = 1;
+        const lectureSessionId = 1;
+        const success = ConflictStatusException;
+
+        // when
+        const result = service.createReservation(
+          WriteReservationCommand.from({ userId, lectureSessionId }),
+        );
+
+        // then
+        expect(result).rejects.toBeInstanceOf(success);
+      });
+
+      it('특강 세션에 유저가 이미 신청했다면 실패한다.', async () => {
+        // given
+        const userId = 1;
+        const lectureSessionId = 1;
+        const success = ConflictStatusException;
+
+        // when
+        const result = service.createReservation(
+          WriteReservationCommand.from({ userId, lectureSessionId }),
+        );
+
+        // then
+        expect(result).rejects.toBeInstanceOf(success);
+      });
+    });
+
+    describe('성공한다.', () => {
+      it('특강 신청에 성공한다.', async () => {
+        // given
+        const userId = 1;
+        const lectureSessionId = 1;
+        const success = {};
+
+        // when
+        const result = service.createReservation(
+          WriteReservationCommand.from({ userId, lectureSessionId }),
+        );
+
+        // then
+        expect(result).toBe(success);
+      });
+
+      it('특강 신청에 완료시 정원에 도달하면 마감상태가 된다.', async () => {
+        // given
+        const userId = 1;
+        const lectureSessionId = 1;
+        const success = {};
+
+        // when
+        const result = service.createReservation(
+          WriteReservationCommand.from({ userId, lectureSessionId }),
+        );
+
+        // then
+        expect(result).toBe(success);
+      });
+    });
+  });
 });
