@@ -6,7 +6,7 @@ import {
 
 export abstract class ApplicationException extends Error {
   /** 에러 메시지 */
-  readonly message: string;
+  message: string;
   /** 에러 상태값으로 HttpCode와 대응한다. */
   readonly state: number;
 

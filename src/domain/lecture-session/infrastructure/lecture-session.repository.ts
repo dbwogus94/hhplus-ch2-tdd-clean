@@ -8,6 +8,7 @@ import {
 } from 'src/common';
 
 export abstract class LectureSessionRepositoryPort extends BaseRepository<LectureSessionEntity> {
+  /** 접수가능한 특강 세션을 날짜 별로 조회한다. */
   abstract getAvailableOneByStartedAt(
     startedAt: Date,
   ): Promise<LectureSessionEntity[]>;
