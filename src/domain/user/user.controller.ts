@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { GetLectureReservationsResponse } from './dto';
 
 @Controller('user')
 export class UserController {
@@ -16,7 +17,7 @@ export class UserController {
   @HttpCode(200)
   async getLectureReservations(
     @Param('id', ParseIntPipe) userId: number,
-  ): Promise<unknown[]> {
+  ): Promise<GetLectureReservationsResponse[]> {
     console.log(userId);
     throw new NotFoundException('미구현 API');
   }
